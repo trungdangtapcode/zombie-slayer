@@ -1,0 +1,14 @@
+{
+	"handpoint": [56,94],
+	"barrel": [108,84],
+	"recoil": 3,
+	"bullet_line_color": [67, 91, 232, 255],
+	"type": "gun",
+	"shooting_cooldown": 0.05,
+	"bullet_lifetime": 5,
+	"bullet_velocity": 1800,
+	"damage": 5,
+	"clip_max_ammo": 30,
+	"total_ammo": 250,
+	"reloading_time": 0.7
+}

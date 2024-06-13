@@ -1,0 +1,400 @@
+Week 1:
+- Init game
+- Tao module button
+- Tao font 
+- Nhan vat di chuyen
+- Camera di chuyen
+- Camera zoom in/out
+- File reader
+- Animation
+- Weapon/ rotate theo nong sung/ toan/ bullet
+Week 2:
+- Bullet co setter/getter
+- Recoil/ Stability
+- HP bar
+- gun -> weapon
+- FlameThrower is so fire
+
+json (ok)
+define 
+singleton
+
+item (ok)
+ammo
+shotgun
+xls (ok)
+missle
+more zom (ok)
+food
+upgrade
+
+UI (ok)
+paritle fire (ok)
+lighting (ok)
+
+multiplayer
+soundtrack
+
+//
+weapon.current_player_center/weapon.rect.center
+
+file food item ui
+Todolist
+
+==level docstring====================
+        '''
+            Level contains all objects, sprites and screen to blit
+
+            create_map(): create everything
+            update(): update everything
+            create_bullet(pos, weapon): create a bullet at pos and ref to weapon
+        '''
+        '''
+            Dynamic top-down camera, render with priority zindex then centery
+            
+            mouse_wolrd_position(): get current mouse position but in world's coordinate
+            custom_draw(player): draw sprite and update camera position
+            draw_sprite(sprite): transform image and blit
+            screen_shake(swing): shake the screen
+        '''
+==player==============================
+    if (self.current_primary == slot): return
+==player=============================
+    if (self.current_food and 
+        self.current_food.quantity==0 and 
+        self.current_food.eating_current_time==0):
+        print(self.inventory, self.current_primary)
+        self.inventory.pop(self.current_primary)
+        self.disable_primary()
+==item=================================
+class GunItemInventory(ItemInventory):
+    def __init__(self, groups, player, path = 'graphics/weapon/ak47/'):
+        super().__init__()
+        self.path = path
+        self.gun = Gun(player, groups,'ak47')
+        self.player = player
+
+    def activate(self):
+        self.gun.current_player_center = pygame.math.Vector2(self.player.hitbox.center)
+        self.gun.is_disable = False
+    
+    def disable(self):
+        self.gun.is_disable = True
+==level=================================
+    def create_weapon(self,player,name, type=''):
+        if (player.current_weapon): return
+        if (type=='gun'):
+            player.current_weapon = Gun(player,[self.visible_sprites],self.create_bullet, name, player.zindex)
+        else: player.current_weapon = FlameThrower(player,[self.visible_sprites],self.create_bullet, name, player.zindex)
+
+    def destroy_weapon(self,player):
+        if player.current_weapon:
+            player.current_weapon.kill()
+        player.current_weapon = None
+==player===============================
+#weapon update
+        if (keys[pygame.K_k]):
+            self.destroy_weapon(self)
+            self.create_weapon(self,'ak47', 'gun')
+        if (keys[pygame.K_l]):
+            self.destroy_weapon(self)
+            self.create_weapon(self,'flamethrower', 'flamethrower')
+
+==enemy=================================
+    target = system.level.enemy
+    if (self.rect.colliderect(target.hitbox)
+        and self.dealing_damage_current_cooldown == 0):
+==ui====================================
+        p1 = pygame.math.Vector2(rect.topleft)
+        p2 = pygame.math.Vector2(rect.topright)
+        p3 = pygame.math.Vector2(rect.bottomright)
+        p4 = pygame.math.Vector2(rect.bottomleft)
+        p1.x += height
+        p2.x += height
+        surface = pygame.Surface((rect.size[0]+height,rect.size[1]))
+        pygame.draw.polygon(self.screen, color, [p1,p2,p3,p4])
+==ui====================================
+https://pastebin.com/Niaz064x
+==enemy=================================
+        for sprite in self.obstacle_sprites:
+            sprite_collision = False
+            offset = pygame.math.Vector2(0,0)
+            if (sprite.rect.clipline(self_pos+offset, target_pos+offset)): 
+                is_sight_collision = True
+                break
+        return is_close and not is_sight_collision
+==enemy=================================
+# self.pos += system.delta_time*self.speed*(target.pos-self.pos)
+==weapon===============================
+self.bullet_start_color = data["bullet_start_color"]
+==bullet=======================
+        # print(self.angle, end=' => ')
+        # self.angle = self.angle #update image with rotate + original state
+        # print(self.angle)
+==bullet=======================
+        # print(self.angle)
+        # self.angle = self.angle
+        # print(self.angle) # them cai nay vo thi bi bug o print tren :D?
+==bullet==========================
+    def scale_ratio(self,image, rect, len_side):
+        image = pygame.transform.scale(image,pygame.math.Vector2(1,1)*len_side)
+        rect = image.get_rect(center = rect.center)
+==player==========================
+bg = self.image
+mask = pygame.image.load('oop/image/test/circle_mask.png').convert_alpha()
+masked = bg.copy()
+masked.blit(mask, (0,0), None, pygame.BLEND_RGBA_MULT) 
+self.image = masked
+#RGBA NOT RGB dmm
+
+==weapon============================
+#rotate_point
+self.handpoint = pygame.math.Vector2(int(f.readline()), int(f.readline()))
+self.barrel = pygame.math.Vector2(int(f.readline()), int(f.readline()))
+self.bullet_line_color = tuple(map(int,f.readline().split()))
+==bullet==============================
+if (weapon.flip):
+    dbarrel.x *= -1
+==bullet===============================
+angle = weapon.target if not weapon.flip else 180-weapon.target
+==player================================
+ self.velocity *= (1-system.delta_time/self.decay_fiction)
+==bullet==================================
+def vec_to_angle_screen(vec):
+    return -atan2(vec.y,vec.x)/pi*180
+
+more_acc_angle = vec_to_angle_screen(self.bullet.rect.center-self.barrel_pos) #more than -self.bullet.angle
+print(more_acc_angle,-self.bullet.angle, vec_to_angle_screen(self.bullet.direction*10))
+
+    return atan2(self.direction.y,self.direction.x)/pi*180
+==player==================================
+# self.image.set_colorkey(RED)
+posO = self.rect.center + self.center_to_handpoint_rotated
+==player=======================================
+class Weapon(pygame.sprite.Sprite):
+    def __init__(self,player,groups, zindex = 0):
+        super().__init__(groups)
+
+        self.zindex = zindex
+        self.player = player
+
+        self.name = 'rod'
+        self.path = PATH + '/graphics/weapon/'+ self.name
+        sprite_path = self.path+ '/sprite/0.png' 
+        self.original_image = pygame.image.load(sprite_path).convert_alpha()
+        self.image = self.original_image
+        self.image.set_colorkey(RED)
+        
+        self.rect = self.image.get_rect()
+        self.cc = 0
+        # self.weapon_rotate(45)
+        # print(self.rect,self.image.get_rect())
+
+        info_path = self.path+'/info.txt'
+        self.read_info(info_path)
+    
+    def read_info(self,path):
+        f = open(path, "r")
+        #rotate_point
+        self.handpoint = pygame.math.Vector2(int(f.readline()), int(f.readline()))
+        print(self.handpoint)
+        self.distance_to_ray = int(f.readline()) #handpoint to ray
+        self.center_to_handpoint = self.handpoint-(pygame.math.Vector2(self.original_image.get_size())-pygame.math.Vector2(1,1))/2
+        self.center_to_handpoint_rotated = self.center_to_handpoint
+        print(self.center_to_handpoint)
+    def weapon_rotate(self, angle):
+        self.image = pygame.transform.rotate(self.original_image,angle)
+        self.rect = self.image.get_rect()
+        self.center_to_handpoint_rotated = self.center_to_handpoint.rotate(-angle)
+        # print(self.center_to_handpoint_rotated,self.center_to_handpoint)
+    def update_transform(self):
+        # placement
+        self.rect.center = self.player.rect.center + dirname_to_weapon_shift[self.player.dirname] - self.center_to_handpoint*0 - self.center_to_handpoint_rotated
+        print(self.center_to_handpoint,self.center_to_handpoint_rotated)
+        # self.weapon_rotate
+        # print(self.rect.size)
+    def update(self):
+        self.cc += 1
+        self.weapon_rotate(self.cc)
+        # self.weapon_rotate(90)
+        self.update_transform()
+        # print(self.rect.centery, self.player.rect.centery)
+        # print(self.player.rect.center + dirname_to_weapon_shift[self.player.dirname])
+==level===========================================
+self.force_to_player = 15
+==player===========================================
+mouse = pygame.math.Vector2(pygame.mouse.get_pos())
+        mouse = mouse*system.camera.zoom_out_scale + pygame.math.Vector2(system.camera.offset)
+==level============================================
+        # self.player.ccbm()
+
+            # print(sprite.rect.topleft)
+
+        # level = 'testing_level'
+        # room_id = 0 #wolrd, level, map, scene, room
+        # level_path = PATH + 'level/' + level + '/' + str(room_id) + '/'
+        # self.screen.blit(file.SpriteSheet(level_path+'sheet.png',TILESIZE,TILESIZE).get_image(2),(0,0))
+==file============================================
+#create crop
+image = pygame.Surface((self.sprite_w, self.sprite_h)).convert_alpha()
+==tile====================================
+self.image = pygame.image.load('oop/image/test/rock.png').convert_alpha()
+==level==============================================
+    for row_index,row in enumerate(WORLD_MAP):
+        for col_index, col in enumerate(row):
+            x = col_index * TILESIZE
+            y = row_index * TILESIZE
+            if col == 'x':
+                Tile((x,y),[self.visible_sprites,self.obstacle_sprites])
+            if col == 'p':
+                self.player =Player((x,y),[self.visible_sprites], self.obstacle_sprites)
+==player===========================================
+        print(speed
+              ,vector_to_angle(self.direction)/pi*180
+              ,vector_to_angle(self.facing_direction)/pi*180/pi*180
+              ,angle_distance(vector_to_angle(self.direction),vector_to_angle(self.facing_direction))/pi*180)
+        # print(speed
+        #       ,dirname_to_angle[self.dirname]/pi*180
+        #       ,atan2(self.facing_direction.y,self.facing_direction.x)/pi*180
+        #       ,angle_distance(dirname_to_angle[self.dirname],-atan2(self.facing_direction.y,self.facing_direction.x))/pi*180)
+
+==level============================================
+        system.camera_pos = self.pos
+        system.camera_offset = self.offset
+==file===============================================
+
+camera_pos = (0,0)
+camera_offset = (0,0)
+camera_zoom_out_scale = 1
+==player============================================
+        # print(system.camera_offset,pygame.mouse.get_pos(), mouse ,self.pos)
+==player==============================================
+if (self.direction.x!=0):
+            if self.direction.x>0: self.dirname = 1
+            else: self.dirname = 3 
+        elif (self.direction.y!=0):
+            if self.direction.y>0: self.dirname = 2
+            else: self.dirname = 0
+
+==player==============================================
+self.image = pygame.image.load('oop/image/test/player.png').convert_alpha()
+
+==file===================================================
+#har_namedir = ['adam']
+
+import pygame
+
+
+
+PATH = 'oop'
+
+player_graphics = []
+count_character = 1
+char_info = [
+    {
+        'namedir': 'adam',
+        'name': 'Adam',
+
+        'anim_walking_framecount': [0,6,0,0] #dir: N E S W
+    }
+]
+
+for idx_player in range(count_character):
+    current_graphics = {}
+    info = char_info[idx_player]
+    anim_path = PATH + '/player/' + info['namedir']
+    current_graphics['walking'] = []
+    for dir in range(4):
+        current_graphics_dir = []
+        for frame in range(info['anim_walking_framecount'][dir]):
+            this_dir_path = anim_path + '/walking/' + str(dir)
+            current_graphics_dir.append()
+
+    
+
+
+==level======================================================= 
+        # self.offset.x = player.rect.centerx - self.half_width*self.zoom_out_scale
+        # self.offset.y = player.rect.centery - self.half_height*self.zoom_out_scale
+
+==Game=======================================================
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    system.mouse_scroll = -1
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    system.mouse_scroll = 1
+                else: system.mouse_scroll = 0
+
+===Player=========================================================
+def collision(self):
+        for sprite in self.obstacle_sprites:
+            if not self.rect.colliderect(sprite.rect): continue
+            if (self.direction.x>0): #right
+                self.rect.right = sprite.rect.left
+            if (self.direction.x<0): 
+                self.rect.left = sprite.rect.right
+            if (self.direction.y>0): #down
+                self.rect.bottom = sprite.rect.top
+            if (self.direction.y>0):
+                self.rect.top = sprite.rect.bottom
+
+==GUI=============================================================
+import pygame
+
+pygame.font.init()
+
+class Text():
+    def __init__(self, screen = None, text = '', size = 24, color = (0,0,0), pos = (0, 0), fontname = 'oop/font/slkscr.ttf'):
+        self.screen = screen
+        self.pos = pos
+        self.text = text
+        self.fontname = fontname
+        self.change_size(size)
+        self.color = color
+    def change_size(self,size):
+        self.size = size
+        self.font = pygame.font.Font(self.fontname,size)
+    def draw(self, pos = None, screen = None):
+        if (screen==None):
+            screen = self.screen
+        if (pos==None):
+            pos = self.pos 
+        text_surface = self.font.render(self.text, False, self.color)
+        self.screen.blit(text_surface,pos)
+
+class Button():
+    def __init__(self, screen = None, pos = (0,0), size = (100,100), image = None, text = None):
+        self.image = image
+        self.change_size(size)
+        if (image!=None): self.rect = self.image.get_rect()
+        self.rect.topleft = pos
+        self.screen = screen
+    def change_size(self,size):
+        self.size = size
+        if (self.image!=None): self.image = pygame.transform.scale(self.image,size)
+    def draw(self, pos = None, screen = None):
+        if (screen==None):
+            screen = self.screen
+        if (pos==None):
+            pos = self.rect.topleft
+        self.screen.blit(self.image, pos)
+
+    @classmethod
+    def create_with_color(cls):
+        pass
+
+
+
+
+
+=======================================================================
+    # screen.fill((255,255,0))
+    # x.draw()
+    # y.draw()
+
+# start_img = pygame.image.load('oop/image/start_button.png').convert_alpha()
+# x = GUI.Button(screen, (100, 100), (100,200), start_img)
+# y = GUI.Text(screen, 'skibidi', 50, GREEN, (100, 100))
+
+# button_bg = pygame.image.load('oop/image/button_01.png').convert_alpha()
+# x = GUI.Button(screen, (100,100), (200,50), button_bg, 'xin chao')

@@ -1,0 +1,12 @@
+60
+88
+116
+80
+5
+255 194 102
+
+handpoint_x
+handpoint_y
+barrel_x
+barrel_y
+recoil
