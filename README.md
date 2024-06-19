@@ -24,5 +24,5 @@ Gặp dơi hay zombie tầm xe nên dùng súng (ưu tiên laser, vật thể la
 RPG thì quá OP =))
 
 # UML
-![UML](https://media.discordapp.net/attachments/1030096023328149509/1251284671723999292/OOP_diagram_layout.drawio.png?ex=666e0529&is=666cb3a9&hm=a1d6803d2b68876b577de154917e7e7744fcb005c4e529696661c6241f9323ad&=&format=webp&quality=lossless&width=935&height=565)
+![UML](https://github.com/trungdangtapcode/zombie-slayer/blob/main/UML1106.png)
  
